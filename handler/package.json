@@ -1,0 +1,16 @@
+{
+  "name": "ethereum-listener-handler",
+  "version": "1.0.0",
+  "description": "handler for any ethereum even",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anthony Estebe <contact@anthonyestebe.com>",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.1",
+    "axios": "^0.16.1"
+  }
+}

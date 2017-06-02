@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  rabbitmq:
+    image: rabbitmq
+    hostname: rabbitmq
+
+  handler:
+    build: ./handler
+    links:
+      - rabbitmq
+    environment:
+      - CHANNEL_NAME=channelX
+
+    
