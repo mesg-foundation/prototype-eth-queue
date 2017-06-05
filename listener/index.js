@@ -1,16 +1,23 @@
 const Web3 = require("web3")
-const provider = new Web3.providers.HttpProvider("http://localhost:8545")
+const kue = require('kue')
 const contract = require("truffle-contract")
-const abi = require("./erc20-abi.json")
-const contractAddress = "0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5"
+const provider = new Web3.providers.HttpProvider("http://parity:8545")
+
+const queue = kue.createQueue({
+  redis: {
+    host: 'redis'
+  }
+})
 
 const MyContract = contract({
-  abi: abi,
+  abi: require("./abi.json"),
 })
 MyContract.setProvider(provider)
 
-MyContract.at(contractAddress)
-.then( instance => {
+console.log(process.env.CONTRACT_ADDRESS)
+
+MyContract.at(process.env.CONTRACT_ADDRESS)
+.then(instance => {
   console.log("contract loaded")
   console.log("listen for event")
 
@@ -27,6 +34,13 @@ MyContract.at(contractAddress)
     }
     else {
       console.log(event)
+      queue.create(process.env.QUEUE_NAME, {
+        url: 'http://webhook.site/da9c3dba-881f-4f48-8229-bb0caf30c3d4',
+        payload: event.args
+      })
+      .attempts(10)
+      .backoff({ type:'exponential' })
+      .save()
     }
   })
 
@@ -46,7 +60,9 @@ MyContract.at(contractAddress)
 
 })
 .catch( error => {
+  console.log("PUUUUTE")
   console.log(error)
+  process.exit(0)
 })
 
 

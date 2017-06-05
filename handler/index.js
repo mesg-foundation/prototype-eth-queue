@@ -1,15 +1,21 @@
-const $axios = require('axios')
-const Queue = require('./queue.js')
+import kue from 'kue'
+import webhook from './jobs/webhook'
 
-Queue.onMessage(process.env.CHANNEL_NAME, ({url, payload}) => new Promise((resolve, reject) => {
-  console.log(`receiver ${url}, with payload ${payload}`)
-  $axios.post(url, payload)
-  .then(response => {
-    console.log(response.data)
-    resolve(response)
+const queue = kue.createQueue({
+  redis: {
+    host: 'redis'
+  }
+})
+
+queue.process(process.env.QUEUE_NAME, (job, done) => webhook.process(job, job.data, done))
+
+queue.on('error', err => console.error(`ERROR: ${err}`))
+
+queue.watchStuckJobs(process.env.STUCK_JOB_INTERVAL || 1000)
+
+process.once('SIGTERM', sig => {
+  queue.shutdown(5000, err => {
+    console.log('Kue shutdown: ', err || '' )
+    process.exit(0)
   })
-  .catch(error => {
-    console.error(error)
-    reject(error)
-  })
-}))
+})

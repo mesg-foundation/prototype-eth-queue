@@ -4,13 +4,18 @@
   "description": "handler for any ethereum even",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "babel-node index.js --presets es2015,stage-2",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Anthony Estebe <contact@anthonyestebe.com>",
   "license": "ISC",
   "dependencies": {
-    "amqplib": "^0.5.1",
-    "axios": "^0.16.1"
+    "axios": "^0.16.1",
+    "kue": "^0.11.6"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1"
   }
 }

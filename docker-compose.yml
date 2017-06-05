@@ -1,15 +1,46 @@
 version: '2'
 
 services:
-  rabbitmq:
-    image: rabbitmq
-    hostname: rabbitmq
+  parity:
+    image: ethcore/parity:v1.6.6
+    ports:
+      - "8180:8180"
+      - "30303:30303"
+      - "8545:8545"
+      - "8546:8546"
+      - "8080:8080"
+      - "8083:8083"
+      - "8082:8082"
+    command: --jsonrpc-interface "0.0.0.0" --jsonrpc-hosts="all" --base-path /root/parity
+    volumes:
+      - "~/Library/Application\ Support/io.parity.ethereum:/root/parity"
+
+  redis:
+    image: redis
+
+  kue:
+    image: pavlov/kue-dashboard
+    ports:
+      - "80:80"
+    links:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379
 
   handler:
     build: ./handler
     links:
-      - rabbitmq
+      - redis
     environment:
-      - CHANNEL_NAME=channelX
+      - QUEUE_NAME=channelX
+      - STUCK_JOB_INTERVAL=1000
 
-    
+  listener:
+    build: ./listener
+    restart: always
+    links:
+      - redis
+      - parity
+    environment:
+      - QUEUE_NAME=channelX
+      - CONTRACT_ADDRESS=0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5
