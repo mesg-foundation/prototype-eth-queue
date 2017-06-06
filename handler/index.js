@@ -7,7 +7,7 @@ const queue = kue.createQueue({
   }
 })
 
-queue.process(process.env.QUEUE_NAME, (job, done) => webhook.process(job, job.data, done))
+queue.process(process.env.QUEUE_NAME, (job, done) => webhook(job, done))
 
 queue.on('error', err => console.error(`ERROR: ${err}`))
 

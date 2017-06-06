@@ -4,11 +4,13 @@
         "events": [
             {
                 "name": "Approval",
-                "endpoint": "http://webhook.site/562a7a36-6aa8-4807-9c9f-a1ca9e1fbcaf"
+                "endpoint": "http://webhook.site/562a7a36-6aa8-4807-9c9f-a1ca9e1fbcaf",
+                "secret": "thisisasecret"
             },
             {
                 "name": "Transfer",
-                "endpoint": "http://webhook.site/5592cdc1-a3bf-44af-9a77-c486023dc477"
+                "endpoint": "http://webhook.site/5592cdc1-a3bf-44af-9a77-c486023dc477",
+                "secret": "thisisasecret"
             }
         ],
         "abi": [

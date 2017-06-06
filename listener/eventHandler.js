@@ -8,6 +8,7 @@ const queue = kue.createQueue({
 
 export default event => queue.create(process.env.QUEUE_NAME, {
     title: `[${event.meta.name}] ${event.meta.address}`,
+    meta: event.meta,
     url: event.meta.endpoint,
     payload: event.args
   })

@@ -8,7 +8,7 @@ const eventList = Events.map(({ abi, address, events }) => {
   const contract = web3.eth.contract(abi)
   const instance = contract.at(address)
   
-  const eventsObjects = events.map(({ name, endpoint }) => {
+  const eventsObjects = events.map(({ name, endpoint, secret }) => {
     const eventWatcher = instance[name]({}, { fromBlock: 'latest', toBlock: 'latest' })
     eventWatcher.watch((err, e) => {
       if (err) { return process.exit(0) }
@@ -17,7 +17,8 @@ const eventList = Events.map(({ abi, address, events }) => {
         meta: {
           address,
           name,
-          endpoint
+          endpoint,
+          secret,
         }
       })
     })
