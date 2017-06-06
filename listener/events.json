@@ -1,0 +1,35 @@
+[
+    {
+        "address": "0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5",
+        "events": [
+            {
+                "name": "Approval",
+                "endpoint": "http://webhook.site/562a7a36-6aa8-4807-9c9f-a1ca9e1fbcaf"
+            },
+            {
+                "name": "Transfer",
+                "endpoint": "http://webhook.site/5592cdc1-a3bf-44af-9a77-c486023dc477"
+            }
+        ],
+        "abi": [
+            {
+                "name": "Approval(address,address,uint256)",
+                "type": "event",
+                "inputs": [
+                    { "name": "owner", "type": "address", "indexed": true },
+                    { "name": "spender", "type": "address", "indexed": true },
+                    { "name": "fxpValue", "type": "uint256", "indexed": false }
+                ]
+            },
+            {
+                "name": "Transfer(address,address,uint256)",
+                "type": "event",
+                "inputs": [
+                    { "name": "from", "type": "address", "indexed": true },
+                    { "name": "to", "type": "address", "indexed": true },
+                    { "name": "value", "type": "uint256", "indexed": false }
+                ]
+            }
+        ]
+    }
+]

@@ -1,15 +1,18 @@
 import $axios from 'axios'
 
+const t = () => new Date().toISOString()
+
 const process = (job, { url, payload }, done) => {
-  job.log(`POST: ${url} with payload ${JSON.stringify(payload)}`)
+  job.log('========== Sending new Webhook ==========')
+  job.log(`${t()} [POST] ${url} with payload ${JSON.stringify(payload)}`)
   $axios.post(url, payload)
   .then(response => {
-    job.log(`SUCCESS: ${response.status}`)
-    job.log(`RESPONSE: ${response.data}`)
+    job.log(`${t()} [STATUS] ${response.status}`)
+    job.log(`${t()} [RESPONSE] ${response.data}`)
     done()
   })
   .catch(error => {
-    job.log(`ERROR: ${error}`)
+    job.log(`${t()} [ERROR] ${error}`)
     done(error)
   })
 }

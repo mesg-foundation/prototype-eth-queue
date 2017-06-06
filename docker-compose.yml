@@ -32,7 +32,7 @@ services:
     links:
       - redis
     environment:
-      - QUEUE_NAME=channelX
+      - QUEUE_NAME=webhook
       - STUCK_JOB_INTERVAL=1000
 
   listener:
@@ -42,5 +42,5 @@ services:
       - redis
       - parity
     environment:
-      - QUEUE_NAME=channelX
+      - QUEUE_NAME=webhook
       - CONTRACT_ADDRESS=0x48c80F1f4D53D5951e5D5438B54Cba84f29F32a5
