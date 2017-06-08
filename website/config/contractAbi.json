@@ -1,0 +1,281 @@
+[
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "contractAddress",
+          "type": "address"
+        },
+        {
+          "name": "eventName",
+          "type": "string"
+        },
+        {
+          "name": "eventInputsAbi",
+          "type": "string"
+        },
+        {
+          "name": "httpEndpoint",
+          "type": "string"
+        },
+        {
+          "name": "secret",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        }
+      ],
+      "name": "createEventListener",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "creator",
+          "type": "address"
+        },
+        {
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "disableEventListenerThatReachesErrorLimit",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "destroy",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getUsersAddress",
+      "outputs": [
+        {
+          "name": "users",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_creator",
+          "type": "address"
+        },
+        {
+          "name": "_index",
+          "type": "uint256"
+        }
+      ],
+      "name": "getEventListener",
+      "outputs": [
+        {
+          "name": "creator",
+          "type": "address"
+        },
+        {
+          "name": "index",
+          "type": "uint256"
+        },
+        {
+          "name": "contractAddress",
+          "type": "address"
+        },
+        {
+          "name": "eventName",
+          "type": "string"
+        },
+        {
+          "name": "eventInputsAbi",
+          "type": "string"
+        },
+        {
+          "name": "httpEndpoint",
+          "type": "string"
+        },
+        {
+          "name": "enable",
+          "type": "bool"
+        },
+        {
+          "name": "secret",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256"
+        },
+        {
+          "name": "enable",
+          "type": "bool"
+        }
+      ],
+      "name": "updateEnableEventListener",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256"
+        },
+        {
+          "name": "contractAddress",
+          "type": "address"
+        },
+        {
+          "name": "eventName",
+          "type": "string"
+        },
+        {
+          "name": "eventInputsAbi",
+          "type": "string"
+        },
+        {
+          "name": "httpEndpoint",
+          "type": "string"
+        },
+        {
+          "name": "enable",
+          "type": "bool"
+        },
+        {
+          "name": "secret",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        }
+      ],
+      "name": "updateEventListener",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_recipient",
+          "type": "address"
+        }
+      ],
+      "name": "destroyAndSend",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "creator",
+          "type": "address"
+        }
+      ],
+      "name": "getEventListenersCount",
+      "outputs": [
+        {
+          "name": "count",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "creator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "EventListenerUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "creator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "EventListenerThatReachesErrorLimit",
+      "type": "event"
+    }
+  ]
