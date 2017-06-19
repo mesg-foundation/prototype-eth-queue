@@ -50,11 +50,7 @@ contract('EthQueue', accounts => {
   
   describe("get event listener", () => {
     it("get event listener #0 wallet 0", () => {
-      return instance.getEventListener(
-        accounts[0],
-        0,
-        {from: accounts[0]}
-      )
+      return instance.eventListeners(0)
       .then( (eventListener) => {
         assert.equal(eventListener[0], accounts[0], "wallet address is not the same")
         assert.equal(eventListener[1], 0, "index is not the same")
@@ -78,11 +74,7 @@ contract('EthQueue', accounts => {
         {from: accounts[0]}
       )
       .then( () => {
-        return instance.getEventListener(
-          accounts[0],
-          0,
-          {from: accounts[0]}
-        )
+        return instance.eventListeners(0)
       })
       .then( (eventListener) => {
         assert.equal(eventListener[2], 0x48c80F1f4D53D5951EEEEEEEEEECba84f29F32a5, "contract address is not the same")
@@ -114,11 +106,7 @@ contract('EthQueue', accounts => {
         {from: accounts[0]}
       )
       .then( () => {
-        return instance.getEventListener(
-          accounts[0],
-          0,
-          {from: accounts[0]}
-        )
+        return instance.eventListeners(0)
       })
       .then( (eventListener) => {
         assert.equal(eventListener[6], true, "event should be enable")
@@ -131,11 +119,7 @@ contract('EthQueue', accounts => {
         )
       })
       .then( () => {
-        return instance.getEventListener(
-          accounts[0],
-          0,
-          {from: accounts[0]}
-        )
+        return instance.eventListeners(0)
       })
       .then( (eventListener) => {
         assert.equal(eventListener[6], false, "event should be disable")
@@ -148,11 +132,7 @@ contract('EthQueue', accounts => {
         )
       })
       .then( () => {
-        return instance.getEventListener(
-          accounts[0],
-          0,
-          {from: accounts[0]}
-        )
+        return instance.eventListeners(0)
       })
       .then( (eventListener) => {
         assert.equal(eventListener[6], true, "event should be disable")
@@ -160,36 +140,37 @@ contract('EthQueue', accounts => {
     })
   })
 
-  describe("get users address", () => {
-    it("get users address", () => {
-      return instance.getUsersAddress(
-        {from: accounts[0]}
-      )
-      .then( (addresses) => {
-        assert.equal(addresses.length, 2, "addresses.length is not correct")
-        assert.equal(addresses[0], accounts[0], "address is not correct")
-        assert.equal(addresses[1], accounts[1], "address is not correct")
+  describe("get event listener Ids Per Creator", () => {
+    it("get event Listener Ids For Creator", () => {
+      return instance.eventListenerIdsForCreator(accounts[0])
+      .then( (ids) => {
+        assert.equal(ids.length, 2, "ids.length is not correct")
+        assert.equal(ids[0], 0, "id is not correct")
+        assert.equal(ids[1], 1, "id is not correct")
+      })
+    })
+
+    it("get event Listener id For a Creator", () => {
+      return instance.eventListenerIdsPerCreator(accounts[0], 1)
+      .then( (id) => {
+        assert.equal(id, 1, "id is not correct")
+      })
+    })
+
+    it("get event Listener id For a Creator. should fail", () => {
+      return instance.eventListenerIdsPerCreator(accounts[0], 3232)
+      .then(assert.fail)
+      .catch(e => {
+        assert(e.message != "assert.fail()", "Should fail")
       })
     })
   })
 
   describe("get event listener count", () => {
-    it("get event listener count for account 0", () => {
-      return instance.getEventListenersCount(
-        accounts[0],
-        {from: accounts[0]}
-      )
+    it("get event listener count", () => {
+      return instance.eventListenersCount()
       .then( (count) => {
-        assert.equal(count, 2, "count is not correct")
-      })
-    })
-    it("get event listener count for account 1", () => {
-      return instance.getEventListenersCount(
-        accounts[1],
-        {from: accounts[0]}
-      )
-      .then( (count) => {
-        assert.equal(count, 1, "count is not correct")
+        assert.equal(count, 3, "count is not correct")
       })
     })
   })
@@ -197,16 +178,11 @@ contract('EthQueue', accounts => {
   describe("disable event listener that reaches error limit", () => {
     it("from owner", () => {
       return instance.disableEventListenerThatReachesErrorLimit(
-        accounts[0],
         0,
         {from: accounts[0]}
       )
       .then( () => {
-        return instance.getEventListener(
-          accounts[0],
-          0,
-          {from: accounts[0]}
-        )
+        return instance.eventListeners(0)
       })
       .then( (eventListener) => {
         assert.equal(eventListener[6], false, "event should be disable")
@@ -214,7 +190,6 @@ contract('EthQueue', accounts => {
     })
     it("from second account. should fail", () => {
       return instance.disableEventListenerThatReachesErrorLimit(
-        accounts[0],
         0,
         {from: accounts[1]}
       )

@@ -9,6 +9,8 @@ contract EthQueue is Destructible {
   //*****************
 
   struct EventListener {
+    address creator;
+    uint id;
     address contractAddress;
     string eventName;
     string eventInputsAbi;
@@ -22,21 +24,19 @@ contract EthQueue is Destructible {
   // State variables
   //*****************
 
-  mapping(address => EventListener[]) private eventListeners;
-  address[] private creatorsAddress;
+  mapping(address => uint[]) public eventListenerIdsPerCreator;
+  EventListener[] public eventListeners;
 
   //*****************
   // Events
   //*****************
 
   event EventListenerUpdated(
-    address creator,
-    uint index
+    uint id
   );
 
   event EventListenerThatReachesErrorLimit(
-    address creator,
-    uint index
+    uint id
   );
 
   //*****************
@@ -54,38 +54,12 @@ contract EthQueue is Destructible {
   // Getters
   //*****************
 
-  function getEventListener(address _creator, uint _index) public constant
-  returns (
-    address creator,
-    uint index,
-    address contractAddress,
-    string eventName,
-    string eventInputsAbi,
-    string httpEndpoint,
-    bool enable,
-    string secret,
-    string email
-  ) {
-    EventListener eventListener = eventListeners[_creator][_index];
-    return (
-      _creator,
-      _index,
-      eventListener.contractAddress,
-      eventListener.eventName,
-      eventListener.eventInputsAbi,
-      eventListener.httpEndpoint,
-      eventListener.enable,
-      eventListener.secret,
-      eventListener.email
-    );
+  function eventListenerIdsForCreator(address creator) public constant returns (uint[] ids) {
+    return eventListenerIdsPerCreator[creator];
   }
 
-  function getEventListenersCount(address creator) public constant returns (uint count) {
-    return eventListeners[creator].length;
-  }
-
-  function getUsersAddress() public constant returns (address[] users) {
-    return creatorsAddress;
+  function eventListenersCount() public constant returns (uint count) {
+    return eventListeners.length;
   }
 
   //*****************
@@ -101,17 +75,12 @@ contract EthQueue is Destructible {
     string email
   ) public {
     address creator = msg.sender;
+    uint id = eventListeners.length;
 
-    //get EventListeners of creator
-    EventListener[] eventListenersOfCreator = eventListeners[creator];
-
-    //add creator address to creators if don't exist
-    if (eventListenersOfCreator.length == 0) {
-      creatorsAddress.push(creator);
-    }
-
-    //add new EventListener to EventListeners
-    eventListenersOfCreator.push(EventListener({
+    //add new EventListener to eventListeners
+    eventListeners.push(EventListener({
+      creator: creator,
+      id: id,
       contractAddress: contractAddress,
       eventName: eventName,
       eventInputsAbi: eventInputsAbi,
@@ -121,12 +90,15 @@ contract EthQueue is Destructible {
       email: email
     }));
 
+    //add id to eventListenerIdsPerCreator
+    eventListenerIdsPerCreator[creator].push(id);
+
     //send event
-    EventListenerUpdated(creator, eventListenersOfCreator.length - 1);
+    EventListenerUpdated(id);
   }
 
   function updateEventListener(
-    uint index,
+    uint id,
     address contractAddress,
     string eventName,
     string eventInputsAbi,
@@ -137,7 +109,12 @@ contract EthQueue is Destructible {
   ) public {
     address creator = msg.sender;
     //get EventListener
-    EventListener eventListener = eventListeners[creator][index];
+    EventListener eventListener = eventListeners[id];
+
+    //check that creator is the same
+    if (eventListener.creator != creator) {
+      throw;
+    }
 
     //update
     eventListener.contractAddress = contractAddress;
@@ -149,38 +126,42 @@ contract EthQueue is Destructible {
     eventListener.email = email;
 
     //send event
-    EventListenerUpdated(creator, index);
+    EventListenerUpdated(id);
   }
 
   function updateEnableEventListener(
-    uint index,
+    uint id,
     bool enable
   ) public {
     address creator = msg.sender;
 
     //get EventListener
-    EventListener eventListener = eventListeners[creator][index];
+    EventListener eventListener = eventListeners[id];
+
+    //check that creator is the same
+    if (eventListener.creator != creator) {
+      throw;
+    }
 
     //disable the event
     eventListener.enable = enable;
 
     //send event
-    EventListenerUpdated(creator, index);
+    EventListenerUpdated(id);
   }
 
   function disableEventListenerThatReachesErrorLimit(
-    address creator,
-    uint index
+    uint id
   ) onlyOwner public {
     //get EventListener
-    EventListener eventListener = eventListeners[creator][index];
+    EventListener eventListener = eventListeners[id];
 
     //disable the event
     eventListener.enable = false;
 
     //send event
-    EventListenerUpdated(creator, index);
-    EventListenerThatReachesErrorLimit(creator, index);
+    EventListenerUpdated(id);
+    EventListenerThatReachesErrorLimit(id);
   }
 
 }
